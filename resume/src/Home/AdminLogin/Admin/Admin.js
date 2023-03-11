@@ -1,7 +1,18 @@
-import React,{useState} from 'react';
+import React,{useState,useContext,useEffect} from 'react';
 import Axios from 'axios';
+import { AuthContext } from  '../../../AuthContext';
+import { useNavigate} from 'react-router-dom';
 
 const Admin = () => {
+  const navigate=useNavigate();
+
+    const { isAuthenticated } = useContext(AuthContext);
+
+    useEffect(() => {
+      if (!isAuthenticated) {
+        navigate("/adminlogin");
+      }
+    }, [isAuthenticated,navigate]);
 
     const [formData, setFormData] = useState({
         name: "",

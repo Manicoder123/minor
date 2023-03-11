@@ -1,12 +1,19 @@
-import React,{useState} from 'react';
+import React,{useState,useContext,useEffect} from 'react';
 import './AdminLogin.css';
 import alv from '../../sources/alv.mp4';
 import { useNavigate} from 'react-router-dom';
+import { AuthContext } from '../../AuthContext';
 
 const AdminLogin = () => {
 
-    const style1={height:"250px",margin:"5px"};
-    const navigate=useNavigate();
+  const style1={height:"250px",margin:"5px"};
+  const navigate=useNavigate();
+
+  const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
+
+  useEffect(() => {
+    setIsAuthenticated(false);
+  },[setIsAuthenticated]);
 
     const [formData, setFormData] = useState({
       username: "",
@@ -18,12 +25,16 @@ const AdminLogin = () => {
       console.log(formData);
     
       // validate form data
-      if(formData.username==="admin_mvgr"){
-        navigate("/admin");
+      if(formData.username==="admin_mvgr" && formData.password==="admin_mvgr"){
+        setIsAuthenticated(true);
       }else{
         window.alert("username or the password is wrong");
       }
     };
+
+    if (isAuthenticated){
+      navigate("/admin");
+    }
 
     const handleChange = (e) => {
       setFormData({
