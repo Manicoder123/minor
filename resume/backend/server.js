@@ -33,7 +33,7 @@ app.post('/users/new',async(req,res)=>{
       password:req.body.password,
       branch:req.body.branch,
       regno:req.body.regno,
-      });
+      });    
       
 newUser.save()
     .then(() => {
@@ -45,3 +45,20 @@ newUser.save()
       res.json('Error saving user to database');
     });
 });
+
+app.delete('/users/delete/:userId',async(req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const deletedUser = await User.findOneAndDelete({ regno:userId });
+
+    if (deletedUser) {
+      res.json({ message: 'User deleted successfully' });
+    } else {
+      res.status(404).json({ message: 'User not found' });
+    }
+  } catch (error) {
+    console.log('Error:', error);
+    res.status(500).json({ message: 'Error deleting user' });
+  }
+});  

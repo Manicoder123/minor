@@ -22,6 +22,8 @@ const Admin = () => {
         regno:"",
       });
 
+    const [deleteRegno,setDeleteRegno] =useState("");
+
       const validateEmail = (email) => {
         const regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
         return regex.test(email);
@@ -35,16 +37,40 @@ const Admin = () => {
             Axios.post('http://localhost:3001/users/new',formData)
                 .then((response) => {
                 console.log('Response:', response.data);
+                window.alert("User saved");
                 })
                 .catch((error) => {
                 console.log('Error:', error.message);
+                window.alert(error.message);
                 });
-            window.location.reload();
-            window.alert("User saved");
+                setFormData({
+                  name: "",
+                  password: "",
+                  email:"",
+                  branch:"",
+                  regno:"",
+                });
         }else{
             window.alert("You may have typed the wrong email or unfilled the details");
         }
       };
+
+      const handleDelete=(e)=>{
+        e.preventDefault();
+
+        console.log(deleteRegno);
+
+        Axios.delete(`http://localhost:3001/users/delete/${deleteRegno}`)
+          .then((response) => {
+            console.log(response.data);
+            window.alert("User deleted");
+          })
+          .catch((error) => {
+            console.log(error);
+            window.alert(error.message);
+          });
+          setDeleteRegno("");
+      }
 
       const handleChange = (e) => {
         setFormData({
@@ -52,6 +78,10 @@ const Admin = () => {
           [e.target.name]: e.target.value,
         });
       };
+
+      const handleChange1=(e)=>{
+        setDeleteRegno(e.target.value);
+      }
 
     return (
         <div>
@@ -107,6 +137,20 @@ const Admin = () => {
   </div>
   <button type="submit">create</button>
 </form>
+
+<form onSubmit={handleDelete}>
+  <div>
+  <label htmlFor="regno">regno:</label>
+    <input
+      type="string"
+      name="userid"
+      value={deleteRegno}
+      onChange={handleChange1}
+      maxLength={15}
+    />
+  </div>
+  <button type="submit">delete</button>
+  </form>
 
 
     </div>
