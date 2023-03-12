@@ -54,6 +54,7 @@ app.delete('/users/delete/:userId',async(req, res) => {
 
     if (deletedUser) {
       res.json({ message: 'User deleted successfully' });
+      console.log('User deleted from database');
     } else {
       res.status(404).json({ message: 'User not found' });
     }

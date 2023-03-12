@@ -30,19 +30,18 @@ const Admin = () => {
       }
 
 
-      const handleSubmit = (e) => {
+      async function handleSubmit(e){
         e.preventDefault();
         
         if(validateEmail(formData.email) && formData.name!=="" && formData.password!=="" && formData.email!=="" && formData.branch!=="" && formData.regno!==""){
-            Axios.post('http://localhost:3001/users/new',formData)
-                .then((response) => {
-                console.log('Response:', response.data);
-                window.alert("User saved");
-                })
-                .catch((error) => {
-                console.log('Error:', error.message);
+            try{
+              const response = await Axios.post('http://localhost:3001/users/new',formData);
+              console.log('Response:', response.data);
+              window.alert("User saved");
+            }catch (error) {
+              console.log('Error:', error.message);
                 window.alert(error.message);
-                });
+            }
                 setFormData({
                   name: "",
                   password: "",
@@ -55,20 +54,16 @@ const Admin = () => {
         }
       };
 
-      const handleDelete=(e)=>{
+      async function handleDelete(e){
         e.preventDefault();
-
-        console.log(deleteRegno);
-
-        Axios.delete(`http://localhost:3001/users/delete/${deleteRegno}`)
-          .then((response) => {
-            console.log(response.data);
-            window.alert("User deleted");
-          })
-          .catch((error) => {
-            console.log(error);
-            window.alert(error.message);
-          });
+        try{
+          const response = await Axios.delete(`http://localhost:3001/users/delete/${deleteRegno}`);
+          console.log(response.data);
+          window.alert("User deleted");
+        }catch (error) {
+          console.log(error);
+          window.alert(error.message);
+        }
           setDeleteRegno("");
       }
 
@@ -155,6 +150,6 @@ const Admin = () => {
 
     </div>
     );
-}
+    }
 
 export default Admin;
